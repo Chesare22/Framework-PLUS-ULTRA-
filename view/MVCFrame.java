@@ -1,3 +1,5 @@
+package view;
+
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -14,6 +16,10 @@ public class MVCFrame extends JFrame{
         setContentPane(mainPanel);
         pack();
 
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(600, 400);
+        setVisible(true);
+        
         add_vote_Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -26,8 +32,5 @@ public class MVCFrame extends JFrame{
 
     public static void main(String[] args) {
         MVCFrame frame = new MVCFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.setVisible(true);
     }
 }

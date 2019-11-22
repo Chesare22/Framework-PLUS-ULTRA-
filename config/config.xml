@@ -5,6 +5,7 @@
     <action id="add_vote">
         <class>model.Model</class>
         <method>addVote</method>
+        <param-type>config.Event</param-type>
     </action>
 
 
