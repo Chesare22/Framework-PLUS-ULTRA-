@@ -1,8 +1,8 @@
-package example;
+package framework.example;
 
-import config.Action;
-import config.Event;
-import config.XMLReader;
+import framework.Action;
+import framework.Event;
+import framework.XMLReader;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

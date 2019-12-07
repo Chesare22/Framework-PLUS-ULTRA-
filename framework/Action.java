@@ -1,4 +1,4 @@
-package config;
+package framework;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +17,7 @@ public class Action {
             instance = cons[0].newInstance();
 
 
-        method = instanceClass.getMethod(methodName, Class.forName("config.Event"));
+        method = instanceClass.getMethod(methodName, Class.forName("framework.Event"));
     }
 
     public Object getInstance() {

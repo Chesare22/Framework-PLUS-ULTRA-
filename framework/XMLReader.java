@@ -1,4 +1,4 @@
-package config;
+package framework;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

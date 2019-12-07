@@ -1,4 +1,4 @@
-package config;
+package framework;
 
 public class Event{
     private String name;

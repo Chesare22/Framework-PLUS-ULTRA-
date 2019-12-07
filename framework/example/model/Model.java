@@ -1,6 +1,6 @@
-package example.model;
+package framework.example.model;
 
-import config.Event;
+import framework.Event;
 
 import java.util.HashMap;
 
