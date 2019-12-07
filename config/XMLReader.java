@@ -12,10 +12,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class XMLReader {
-    public NodeList createNodeList(String pathName, String tag) throws ParserConfigurationException, IOException, SAXException {
+    private NodeList createNodeList(String pathName, String tag) throws ParserConfigurationException, IOException, SAXException {
         File fXmlFile = new File(pathName);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -24,7 +23,7 @@ public class XMLReader {
         return doc.getElementsByTagName(tag);
     }
 
-    public Action[] parseNodeListToActions(NodeList nodeList){
+    private Action[] parseNodeListToActions(NodeList nodeList) throws IllegalAccessException, InvocationTargetException {
         int nodeLength = nodeList.getLength();
         Action[] actions = new Action[nodeLength];
 
@@ -32,51 +31,28 @@ public class XMLReader {
             Node node = nodeList.item(index);
             if (node.getNodeType() == Node.ELEMENT_NODE){
                 Element element = (Element) node;
-                Node param = element.getElementsByTagName("param-type").item(0);
-                if(param == null){
-                    actions[index] = new Action(
-                            element.getAttribute("id"),
-                            element.getElementsByTagName("class").item(0).getTextContent(),
-                            element.getElementsByTagName("method").item(0).getTextContent()
-                    );
-                }else{
-                    actions[index] = new Action(
-                            element.getAttribute("id"),
-                            element.getElementsByTagName("class").item(0).getTextContent(),
-                            element.getElementsByTagName("method").item(0).getTextContent(),
-                            param.getTextContent()
-                    );
+                String className = element.getElementsByTagName("class").item(0).getTextContent();
+                String methodName = element.getElementsByTagName("method").item(0).getTextContent();
+                try {
+                    actions[index] = new Action(element.getAttribute("id"), className, methodName);
+                } catch (ClassNotFoundException e) {
+                    System.out.println("No se encontró la clase " + className);
+                    System.exit(1);
+                } catch (NoSuchMethodException e) {
+                    System.out.println("No se encontró el método " + methodName);
+                    System.exit(1);
+                } catch (InstantiationException e) {
+                    System.out.println("El primer constructor para " + className +
+                            " recibe parámetros, y el framework no tiene contemplado este caso");
+                    System.exit(1);
                 }
-
             }
         }
 
         return actions;
     }
 
-    // Just for testing purposes
-    public static void main(String[] args) {
-        XMLReader reader = new XMLReader();
-        Action[] actions;
-        try {
-            actions = reader.parseNodeListToActions(reader.createNodeList("config.xml", "action"));
-            for (Action action : actions) {
-                System.out.println(action);
-                try {
-                    action.createMethod();
-                    action.createInstance();
-                    Method method = action.getMethod();
-                    method.invoke(action.getInstance(), new Event("Rico", 0));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
+    public Action[] readActions(String fileName) throws IOException, SAXException, ParserConfigurationException, InvocationTargetException, IllegalAccessException {
+        return parseNodeListToActions(createNodeList(fileName, "action"));
     }
 }

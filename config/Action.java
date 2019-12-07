@@ -6,52 +6,26 @@ import java.lang.reflect.Method;
 
 public class Action {
     private final String actionName;
-    private final String className;
-    private final String methodName;
-    private String paramTypeName;
     private Method method;
     private Object instance;
 
-    public Action(String actionName, String className, String methodName) {
+    public Action(String actionName, String className, String methodName) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         this.actionName = actionName;
-        this.className = className;
-        this.methodName = methodName;
-    }
-    public Action(String actionName, String className, String methodName, String paramTypeName) {
-        this.actionName = actionName;
-        this.className = className;
-        this.methodName = methodName;
-        this.paramTypeName = paramTypeName;
+
+        Class<?> instanceClass = Class.forName(className);
+        Constructor<?>[] cons = instanceClass.getConstructors();
+            instance = cons[0].newInstance();
+
+
+        method = instanceClass.getMethod(methodName, Class.forName("config.Event"));
     }
 
-    public void createInstance() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class<?> c = Class.forName(className);
-        Constructor<?>[] cons = c.getConstructors();
-        instance = cons[0].newInstance();
-    }
     public Object getInstance() {
         return instance;
     }
 
-    public void createMethod() throws ClassNotFoundException,  NoSuchMethodException {
-        Class<?> c = Class.forName(className);
-        if(paramTypeName == null){
-            method = c.getMethod(methodName);
-        }else{
-            method = c.getMethod(methodName, Class.forName(paramTypeName));
-        }
-    }
-
-    public Method getMethod() {
-        return method;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public String getMethodName() {
-        return methodName;
+    public Object callMethod(Event event) throws InvocationTargetException, IllegalAccessException {
+        return method.invoke(instance, event);
     }
 
     public String getActionName() {
@@ -60,8 +34,6 @@ public class Action {
 
     @Override
     public String toString() {
-        return "Action: " + actionName +
-                "\n  Class: " + className +
-                "\n  Method: " + methodName;
+        return "Action: " + actionName;
     }
 }

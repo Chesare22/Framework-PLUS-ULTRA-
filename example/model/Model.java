@@ -1,4 +1,4 @@
-package model;
+package example.model;
 
 import config.Event;
 
