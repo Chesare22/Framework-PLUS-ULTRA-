@@ -1,0 +1,10 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<config>
+
+    <action id="add_vote">
+        <class>example.model.Model</class>
+        <method>addVote</method>
+    </action>
+
+</config>
