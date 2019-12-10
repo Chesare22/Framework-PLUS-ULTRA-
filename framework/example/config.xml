@@ -3,8 +3,9 @@
 <config>
 
     <action id="add_vote">
-        <class>framework.example.mvc.model.Model</class>
+        <class>framework.example.model.Handler</class>
         <method>addVote</method>
     </action>
+
 
 </config>
