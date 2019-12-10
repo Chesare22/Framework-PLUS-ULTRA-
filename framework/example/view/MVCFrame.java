@@ -1,5 +1,7 @@
 package framework.example.view;
 
+import framework.Event;
+
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JButton;

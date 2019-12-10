@@ -1,29 +1,39 @@
 package framework.example.model;
 
-import framework.Event;
+import java.util.Arrays;
 
-import java.util.HashMap;
+import framework.example.commons.candidates.*;
 
-public class Model{
-    //Queda como (candidato, numero de voto)
-    private HashMap<String, Integer> votes = new HashMap<>();
+public class Model {
 
-    public Model(){
-        votes.put("Cesar", 0);
-        votes.put("Carlos", 0);
-        votes.put("Rico", 0);
+  private final int[] votes;
+  private final Candidate[] candidates;
+
+  public Model(String[] candidatesNames) {
+    votes = new int[candidatesNames.length];
+    Arrays.fill(votes, 0);
+
+    candidates = new Candidate[candidatesNames.length];
+    for (int i = 0; i < candidatesNames.length; i++) {
+      candidates[i] = new Candidate(i, candidatesNames[i]);
     }
+  }
 
-    public void addVote(Event event){
-        int countVotes = this.votes.get(event.getName());
-        this.votes.replace(event.getName(),++countVotes);
-        System.out.println("Se voto por " + event.getName());
-        System.out.println("this.toString: " + toString());
-    }
+  public void vote(int id) {
+    votes[id]++;
+  }
 
-    // Just for testing purposes
-    @Override
-    public String toString(){
-        return votes.toString();
+  public Candidate[] getCandidates() {
+    return candidates;
+  }
+
+  public CandidateAndVotes[] candidatesAndVotes() {
+    CandidateAndVotes[] cav = new CandidateAndVotes[candidates.length];
+    for (int i = 0; i < candidates.length; i++) {
+      cav[i] = new CandidateAndVotes(candidates[i], votes[i]);
     }
+    return cav;
+  }
 }
+
+

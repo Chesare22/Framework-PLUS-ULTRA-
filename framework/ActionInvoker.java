@@ -16,7 +16,7 @@ public class ActionInvoker {
         XMLReader reader = new XMLReader();
         Action[] actionsArray = new Action[0];
         try {
-            actionsArray = reader.readActions("config.xml");
+            actionsArray = reader.readActions("src/framework/example/config.xml");
         } catch (InvocationTargetException | SAXException | ParserConfigurationException | IllegalAccessException | IOException e) {
             e.printStackTrace();
             System.exit(1);
